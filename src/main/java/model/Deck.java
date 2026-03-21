@@ -4,9 +4,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Deck {
     private StringProperty name; // englannin sanoja attribuutti
     private ObservableList<Card> cards; // lista pakan korteista attribuutti
@@ -20,13 +17,41 @@ public class Deck {
         this.cards = FXCollections.observableArrayList();
     }
 
+    //Metodit
+
+    public String getName(){
+        return name.get();
+    }
+
+    public void setName(String name){
+        this.name.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    //Korttien hallinta
+
     /**
      * Lisää kortin pakkaan
      * @param card lisättävä kortti
      */
     public void addCard(Card card){
-        boolean add = cards.add(card);  //metodi , lisää kortin listaan
+        cards.add(card);
+    }
+
+    public void removeCard(Card card){
+        cards.remove(card);
+    }
+
+    public ObservableList<Card> getCards(){
+        return cards;
     }
 
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
