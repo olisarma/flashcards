@@ -20,15 +20,21 @@ public class Deck {
     //Metodit
 
     public String getName(){
+
         return name.get();
+
     }
 
     public void setName(String name){
+
         this.name.set(name);
+
     }
 
     public StringProperty nameProperty() {
+
         return name;
+
     }
 
     //Korttien hallinta
@@ -38,15 +44,21 @@ public class Deck {
      * @param card lisättävä kortti
      */
     public void addCard(Card card){
+
         cards.add(card);
+
     }
 
     public void removeCard(Card card){
+
         cards.remove(card);
+
     }
 
     public ObservableList<Card> getCards(){
+
         return cards;
+
     }
 
 
