@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import model.Deck;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
@@ -24,6 +25,9 @@ public class MainController implements Initializable {
     // Yhdistää FXML:n ListView-komponentin tähän muuttujaan pakkaListView (näkyvä käyttöliittymässä)
     @FXML
     private ListView<Deck> pakkaListView;
+
+    @FXML
+    private TextField pakkaNameField;
 
     // Lista, jossa on kaikki pakat muistissa (näkyvä koodissa) decks
     private ObservableList<Deck> decks;
@@ -34,11 +38,22 @@ public class MainController implements Initializable {
         pakkaListView.setItems(decks);  // yhdistetään listat
     }
 
+    /**
+     * Lisää uuden pakan köyttäjän syöttämällä nimellä.
+     */
     @FXML
     public void handleLisaaPakka() {
-        Deck uusiPakka = new Deck("Uusi pakka");
+        String nimi = pakkaNameField.getText().trim();
+
+        if (nimi.isEmpty()) {
+            return;
+        }
+
+        Deck uusiPakka = new Deck(nimi); //Deck-luokasta
         decks.add(uusiPakka);
         pakkaListView.getSelectionModel().select(uusiPakka);
+
+        pakkaNameField.clear();
     }
 
 
