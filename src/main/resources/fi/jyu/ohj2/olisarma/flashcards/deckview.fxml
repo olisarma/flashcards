@@ -16,6 +16,7 @@
             <Label text="Selitys" />
             <TextField fx:id="selitysField" />
             <Button fx:id="lisaaButton" mnemonicParsing="false" onAction="#handleLisaaKortti" text="Lisää kortti" />
+            <Button fx:id="poistaButton" mnemonicParsing="false" onAction="#handlePoistaKortti" text="Poista kortti" />
             <Button fx:id="takaisinButton" mnemonicParsing="false" onAction="#handleTakaisin" text="Takaisin" />
          </children>
       </HBox>

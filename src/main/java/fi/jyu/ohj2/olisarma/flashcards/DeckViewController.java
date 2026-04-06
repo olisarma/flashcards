@@ -3,11 +3,15 @@ package fi.jyu.ohj2.olisarma.flashcards;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Card;
 import model.Deck;
+
+import java.util.Optional;
 
 public class DeckViewController {
 
@@ -54,4 +58,24 @@ public class DeckViewController {
         termiField.clear();
         selitysField.clear();
     }
+
+
+    @FXML
+    public void handlePoistaKortti(ActionEvent event) {
+        Card valittuKortti = (Card) korttiListView.getSelectionModel().getSelectedItem();
+
+        if (valittuKortti == null) {
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Poista kortti");
+        alert.setHeaderText("Haluatko varmasti poistaa kortin: " + valittuKortti.getTerm() + "?");
+
+        Optional<ButtonType> vastaus = alert.showAndWait();
+        if (vastaus.get() == ButtonType.OK) {
+            deck.removeCard(valittuKortti);
+        }
+    }
+
 }

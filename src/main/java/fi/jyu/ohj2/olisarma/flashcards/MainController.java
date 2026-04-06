@@ -3,20 +3,22 @@ package fi.jyu.ohj2.olisarma.flashcards;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import model.Deck;
 import javafx.scene.control.TextField;
+import model.DeckCollection;
 
 import java.io.IOException;
 
@@ -29,13 +31,12 @@ public class MainController implements Initializable {
     @FXML
     private TextField pakkaNameField;
 
-    // Lista, jossa on kaikki pakat muistissa (näkyvä koodissa) decks
-    private ObservableList<Deck> decks;
+    private DeckCollection deckCollection = new DeckCollection();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        decks = FXCollections.observableArrayList();  // luodaan tyhjä lista pakoille decks
-        pakkaListView.setItems(decks);  // yhdistetään listat
+        deckCollection.lataa();
+        pakkaListView.setItems(deckCollection.getDecks());
     }
 
     /**
@@ -50,7 +51,8 @@ public class MainController implements Initializable {
         }
 
         Deck uusiPakka = new Deck(nimi); //Deck-luokasta
-        decks.add(uusiPakka);
+        deckCollection.lisaaPakka(uusiPakka);
+        deckCollection.tallenna();
         pakkaListView.getSelectionModel().select(uusiPakka);
 
         pakkaNameField.clear();
@@ -61,8 +63,20 @@ public class MainController implements Initializable {
     public void handlePoistaPakka() {
         Deck valittuPakka = pakkaListView.getSelectionModel().getSelectedItem();
 
-        if (valittuPakka != null) {
-            decks.remove(valittuPakka);
+        // Jos mitään ei ole valittu, lopetetaan
+        if (valittuPakka == null) {
+            return;
+        }
+
+        // Luodaan varmistusdialogi
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Poista pakka");
+        alert.setHeaderText("Haluatko varmasti poistaa pakan: " + valittuPakka.getName() + "?");
+
+        Optional<ButtonType> vastaus = alert.showAndWait();
+        if (vastaus.get() == ButtonType.OK) {
+            deckCollection.poistaPakka(valittuPakka);
+            deckCollection.tallenna();
         }
     }
 
