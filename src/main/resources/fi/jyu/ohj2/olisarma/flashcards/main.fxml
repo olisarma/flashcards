@@ -18,7 +18,7 @@
    <bottom>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="pakkaNameField" />
+             <TextField fx:id="pakkaNameField" onAction="#handleLisaaPakka" />
             <Button fx:id="lisaaPakka" mnemonicParsing="false" onAction="#handleLisaaPakka" text="Lisää" />
             <Button fx:id="poistaPakka" mnemonicParsing="false" onAction="#handlePoistaPakka" text="Poista" />
             <Button fx:id="avaaPakka" mnemonicParsing="false" onAction="#handleAvaaPakka" text="Avaa" />

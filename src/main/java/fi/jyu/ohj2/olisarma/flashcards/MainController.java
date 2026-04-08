@@ -33,10 +33,19 @@ public class MainController implements Initializable {
 
     private DeckCollection deckCollection = new DeckCollection();
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         deckCollection.lataa();
         pakkaListView.setItems(deckCollection.getDecks());
+
+        // Asetetaan että voi tuplaklikkaamalla avata pakan myös
+        pakkaListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                handleAvaaPakka(null);
+            }
+        });
     }
 
     /**
@@ -44,13 +53,13 @@ public class MainController implements Initializable {
      */
     @FXML
     public void handleLisaaPakka() {
-        String nimi = pakkaNameField.getText().trim();
-
-        if (nimi.isEmpty()) {
+        if (!validoiPakkaNimi()) {
             return;
         }
 
-        Deck uusiPakka = new Deck(nimi); //Deck-luokasta
+        String nimi = pakkaNameField.getText().trim();
+
+        Deck uusiPakka = new Deck(nimi);
         deckCollection.lisaaPakka(uusiPakka);
         deckCollection.tallenna();
         pakkaListView.getSelectionModel().select(uusiPakka);
@@ -100,7 +109,7 @@ public class MainController implements Initializable {
             Parent root = loader.load();
 
             DeckViewController controller = loader.getController();
-            controller.setDeck(valittuPakka);
+            controller.setDeckJaKokoelma(valittuPakka, deckCollection);
 
             Scene scene = new Scene(root);
 
@@ -116,5 +125,48 @@ public class MainController implements Initializable {
         }catch (IOException e) {
                 throw new RuntimeException(e);
             }
+    }
+
+    /**
+     * Validointi
+     *
+     * @return true jos nimi on kunnossa, muuten false
+     */
+    private boolean validoiPakkaNimi() {
+        // Nollataan aiemmat virhetyylit ja vihjetekstit
+        pakkaNameField.setStyle("");
+        pakkaNameField.setPromptText("");
+
+        String nimi = pakkaNameField.getText();
+
+        // Ei voi olla tyhjä tai pelkkää spacea
+        if (nimi == null || nimi.isBlank()) {
+            pakkaNameField.setStyle("-fx-border-color: red;");
+            pakkaNameField.clear();
+            pakkaNameField.setPromptText("Pakan nimi puuttuu!");
+            return false;
+        }
+
+        // Puolipiste ei kelpaa, koska sitä käytetään tallennus-tiedostossa erotinmerkkinä
+        if (nimi.contains(";")) {
+            pakkaNameField.setStyle("-fx-border-color: red;");
+            pakkaNameField.clear();
+            pakkaNameField.setPromptText("Merkki ; ei käy!");
+            return false;
+        }
+
+        // Tarkistetaan, ettei samannimistä pakkaa ole jo olemassa
+        String siistittyNimi = nimi.trim();
+
+        for (Deck deck : deckCollection.getDecks()) {
+            if (deck.getName().equalsIgnoreCase(siistittyNimi)) {
+                pakkaNameField.setStyle("-fx-border-color: red;");
+                pakkaNameField.clear();
+                pakkaNameField.setPromptText("Samanniminen pakka on jo!");
+                return false;
+            }
+        }
+
+        return true;
     }
 }

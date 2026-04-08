@@ -54,13 +54,23 @@ public class DeckCollection {
     }
 
     /**
-     * Tallentaa kaikki pakat tiedostoon
+     * Tallentaa kaikki pakat TODO TÄHÄN? JA NIIDEN KORTIT tiedostoon
      */
     public void tallenna() {
         try (PrintWriter out = new PrintWriter(new FileWriter(tiedosto))) {
+
+            // Käydään kaikki pakat läpi yksitellem
             for (Deck deck : decks) {
-                out.println(deck.getName());
+
+                // Tallennetaan ensin pakan nimi omalle rivilleen
+                out.println("PAKKA;" + deck.getName());
+
+                // Sitten tallennetaan kaikki tämän pakan kortit
+                for (Card card : deck.getCards()) {
+                    out.println("KORTTI;" + card.getTerm() + ";" + card.getExplanation());
+                }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,13 +80,34 @@ public class DeckCollection {
      * Lukee pakat tiedostosta
      */
     public void lataa() {
+        // Tyhjennetään vanha lista, ennen kuin luetaan tiedostosta uudestaam
         decks.clear();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(tiedosto))) {
             String rivi;
 
+            Deck nykyinenPakka = null;
+
+             // Tiedoston luku loop
             while ((rivi = reader.readLine()) != null) {
-                decks.add(new Deck(rivi));
+
+                // Jaetaan rivi osiin puolipisteen kohdalta
+                // esim. "KORTTI;dog;koira" --> ["KORTTI", "dog", "koira"]
+                String[] osat = rivi.split(";", 3);
+
+                // Jos uusi pakka alkaa
+                if (osat[0].equals("PAKKA")) {
+                    nykyinenPakka = new Deck(osat[1]);
+                    decks.add(nykyinenPakka);
+                }
+
+                // Jos rivi on kortti
+                if (osat[0].equals("KORTTI") && nykyinenPakka != null) {
+                    String termi = osat[1];
+                    String selitys = osat[2];
+
+                    nykyinenPakka.addCard(new Card(termi, selitys));
+                }
             }
 
         } catch (IOException e) {

@@ -12,12 +12,13 @@
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Termi" />
-            <TextField fx:id="termiField" />
+             <TextField fx:id="termiField" onAction="#handleTermiEnter" prefHeight="26.0" prefWidth="72.0" />
             <Label text="Selitys" />
-            <TextField fx:id="selitysField" />
+             <TextField fx:id="selitysField" onAction="#handleLisaaKortti" prefHeight="26.0" prefWidth="70.0" />
             <Button fx:id="lisaaButton" mnemonicParsing="false" onAction="#handleLisaaKortti" text="Lisää kortti" />
             <Button fx:id="poistaButton" mnemonicParsing="false" onAction="#handlePoistaKortti" text="Poista kortti" />
             <Button fx:id="takaisinButton" mnemonicParsing="false" onAction="#handleTakaisin" text="Takaisin" />
+            <Button mnemonicParsing="false" onAction="#handleTallennaMuutokset" text="Tallenna muutokset" />
          </children>
       </HBox>
    </bottom>
