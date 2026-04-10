@@ -16,28 +16,28 @@ import java.util.Optional;
 
 public class DeckViewController {
 
-    @FXML
-    public void handleTakaisin(ActionEvent event){
+    private Deck deck; // Pakka, jota katsotaan
 
-        // Haetaan nappia vastaava ikkuna (Stage)
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private DeckCollection deckCollection; // pakkakokoelma, jonka avulla tiedot tallennetaan tiedostoon
 
-        // Suljetaan ikkuna
-        stage.close();
-    }
-
-    private Deck deck;
-
-    private DeckCollection deckCollection;
-
-    // Kortti jota parhaillaan muokataan
-    private Card muokattavaKortti;
+    private Card muokattavaKortti; // pitää muistissa, mikä kortti on muokattavana
 
     @FXML
-    private ListView korttiListView;
+    private ListView korttiListView;  // listanäkymä pakan korteille
 
-    //
-    public void setDeckJaKokoelma(Deck deck, DeckCollection deckCollection) {
+    @FXML
+    private TextField termiField; // tekstikenttä kortin termin syöttöön
+
+    @FXML
+    private TextField selitysField; // tekstikenttä selityksen syöttöön
+
+
+    /**
+     *
+     * @param deck avattu pakka
+     * @param deckCollection kokoelma, johon pakat kuuluvat
+     */
+    public void setDeckJaCollection(Deck deck, DeckCollection deckCollection) {
         this.deck = deck;
         this.deckCollection = deckCollection;
 
@@ -57,24 +57,38 @@ public class DeckViewController {
         });
     }
 
+
+    /**
+     * Takaisin-napin handlaus. Sulkee nykyisen ikkunan ja palaa takaisin aiempaan näkymään
+     * @param event napin painamisesta tullut tapahtuma
+     */
+    @FXML
+    public void handleTakaisin(ActionEvent event){
+
+        // Haetaan nappia vastaava ikkuna (Stage)
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Suljetaan ikkuna
+        stage.close();
+    }
+
+    /**
+     * Kun käyttäjä painaa Enteriä termin tekstikentässä, siirretään kursoti selityskenttään.
+     * Näin nopeutetaan korttien syöttöä
+     * @param event Enter-näppäimen aiheuttama tapahtuma
+     */
     @FXML
     public void handleTermiEnter(ActionEvent event) {
-        // Siirretään kirjoittaminen toiseen tekstikenttään enteriä painamalla, jotta saadaan nopeammin ja helpommin käsitteet syötettyä
         selitysField.requestFocus();
     }
 
-    @FXML
-    private TextField termiField;
-
-    @FXML
-    private TextField selitysField;
-
     /**
-     * Lisää uuden kortin valittuun pakkaan.
-     * Kortin lisäyksessä tallennetaan myös kaikki tiedot siitä tiedostoon
+     * Lisää uuden kortin pakkaan
+     * Kortin lisäyksestä tallennetaan myös kaikki tiedot siitä tiedostoon
+     * @param actionEvent napin painalluksesta tuleva tapahtuma
      */
     public void handleLisaaKortti(ActionEvent actionEvent) {
-        // Validointi
+        // Validointi (onko tiedot kelvolliset)
         if (!validoiKortti()) {
             return;
         }
@@ -103,6 +117,10 @@ public class DeckViewController {
     }
 
 
+    /**
+     * Poistaa vlaitun kortin listasta
+     * @param event napin painalluksesta tullut tapahtuma
+     */
     @FXML
     public void handlePoistaKortti(ActionEvent event) {
         Card valittuKortti = (Card) korttiListView.getSelectionModel().getSelectedItem();
@@ -111,6 +129,7 @@ public class DeckViewController {
             return;
         }
 
+        // Varmistus ikkuna
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Poista kortti");
         alert.setHeaderText("Haluatko varmasti poistaa kortin: " + valittuKortti.getTerm() + "?");
@@ -123,13 +142,17 @@ public class DeckViewController {
         }
     }
 
+    /**
+     * Tallentaa muokattavaan korttiin tehdyt muutokset
+     * @param event napin painalluksest tullut tapahtuma
+     */
     @FXML
     public void handleTallennaMuutokset(ActionEvent event) {
         if (muokattavaKortti == null) {
             return;
         }
 
-        // Validointi
+        // Validointi (onko sisältö sallittu)
         if (!validoiKortti()) {
             return;
         }
@@ -137,7 +160,7 @@ public class DeckViewController {
         String termi = termiField.getText().trim();
         String selitys = selitysField.getText().trim();
 
-        // 1. tallennus olioon
+        // 1. tallennus card-olioon
         muokattavaKortti.setTerm(termi);
         muokattavaKortti.setExplanation(selitys);
 

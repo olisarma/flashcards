@@ -1,10 +1,12 @@
 PAKKA;Englanti
-KORTTI;Cat;Kissa
+KORTTI;Cat;Kisu
 KORTTI;Hello;Heippa
 KORTTI;Sun;Aurinko
 KORTTI;Night;Yö
 KORTTI;Book;Kirja
-KORTTI;moro;moro
+KORTTI;Yes;Kyllä
+KORTTI;hei;moi
+KORTTI;MOI;Moi
 PAKKA;Ruotsi
 KORTTI;Hej;Hei
 KORTTI;Hund;Koira
@@ -14,7 +16,6 @@ KORTTI;Slut;Loppu
 KORTTI;Jag;Minä
 KORTTI;Bastu;Sauna
 KORTTI;Idag;Tänään
-PAKKA;Korea
-KORTTI;학생;Oppilas
-KORTTI;닭;Kana
-KORTTI;아버지;Isä
+PAKKA;Tanska
+PAKKA;Uusipakka
+KORTTI;uusi;kortti

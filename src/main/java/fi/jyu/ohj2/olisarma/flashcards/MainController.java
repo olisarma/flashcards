@@ -24,17 +24,18 @@ import java.io.IOException;
 
 public class MainController implements Initializable {
 
-    // Yhdistää FXML:n ListView-komponentin tähän muuttujaan pakkaListView (näkyvä käyttöliittymässä)
-    @FXML
-    private ListView<Deck> pakkaListView;
+    private DeckCollection deckCollection = new DeckCollection(); // kokoelma(collection), missä kaikki pakat on muistissa
 
     @FXML
-    private TextField pakkaNameField;
+    private ListView<Deck> pakkaListView; // lista, jossa näkyy kaikki pakat
 
-    private DeckCollection deckCollection = new DeckCollection();
+    @FXML
+    private TextField pakkaNameField; // tekstikenttä, johon voi syöttää uuden pakan nimen
 
-
-
+    /**
+     * @param url FXML-tiedoston sijainti
+     * @param resourceBundle mahdolliset resurssit
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         deckCollection.lataa();
@@ -49,7 +50,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Lisää uuden pakan köyttäjän syöttämällä nimellä.
+     * Lisää uuden pakan käyttäjän syöttämällä nimellä.
      */
     @FXML
     public void handleLisaaPakka() {
@@ -67,7 +68,9 @@ public class MainController implements Initializable {
         pakkaNameField.clear();
     }
 
-
+    /**
+     * Poistaa listasta valitun pakan
+     */
     @FXML
     public void handlePoistaPakka() {
         Deck valittuPakka = pakkaListView.getSelectionModel().getSelectedItem();
@@ -89,8 +92,7 @@ public class MainController implements Initializable {
         }
     }
 
-
-    /*
+    /**
     Avaa pakan tarkasteluun uuden ikkunan etusivu-ikkunan päälle
      */
     @FXML
@@ -109,7 +111,7 @@ public class MainController implements Initializable {
             Parent root = loader.load();
 
             DeckViewController controller = loader.getController();
-            controller.setDeckJaKokoelma(valittuPakka, deckCollection);
+            controller.setDeckJaCollection(valittuPakka, deckCollection);
 
             Scene scene = new Scene(root);
 

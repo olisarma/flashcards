@@ -25,6 +25,7 @@ public class Deck {
 
     }
 
+    // Että psksn nimeä voisi muuttaa myöhemmin, mutta ei nyt käytössä
     public void setName(String name){
 
         this.name.set(name);
