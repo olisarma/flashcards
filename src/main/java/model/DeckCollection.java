@@ -72,7 +72,7 @@ public class DeckCollection {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -110,7 +110,8 @@ public class DeckCollection {
                 }
             }
 
-        } catch (IOException e) { //TODO: korjaa
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

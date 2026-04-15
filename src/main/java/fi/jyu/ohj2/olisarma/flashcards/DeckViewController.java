@@ -2,16 +2,21 @@ package fi.jyu.ohj2.olisarma.flashcards;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Card;
 import model.Deck;
 import model.DeckCollection;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class DeckViewController {
@@ -57,7 +62,35 @@ public class DeckViewController {
         });
     }
 
+    @FXML
+    public void handleHarjoittele(ActionEvent event) {
+        if (deck == null) {
+            return;
+        }
 
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fi/jyu/ohj2/olisarma/flashcards/practiceview.fxml")
+            );
+            Parent root = loader.load();
+
+            PracticeController controller = loader.getController();
+            controller.setDeck(deck);
+
+            Scene scene = new Scene(root);
+
+            Stage harjoitteluStage = new Stage();
+            harjoitteluStage.setScene(scene);
+            harjoitteluStage.setTitle("Harjoitustila");
+            harjoitteluStage.setMinWidth(500);
+            harjoitteluStage.setMinHeight(400);
+            harjoitteluStage.initModality(Modality.APPLICATION_MODAL);
+            harjoitteluStage.showAndWait();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Takaisin-napin handlaus. Sulkee nykyisen ikkunan ja palaa takaisin aiempaan näkymään
      * @param event napin painamisesta tullut tapahtuma
