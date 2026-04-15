@@ -56,3 +56,6 @@ Deck-luokalle on tehty JUnit-testit
    Valitse kortti
    Paina "Poista kortti"
    Vahvista poisto
+6. Pakan arjoittelutila:
+   Paina harjoittele
+   Aloita selaamaan kortteja, voit myös palata taaksepäin pakassa

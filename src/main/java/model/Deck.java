@@ -32,12 +32,6 @@ public class Deck {
 
     }
 
-    public StringProperty nameProperty() {
-
-        return name;
-
-    }
-
     //Korttien hallinta
 
     /**
